@@ -202,7 +202,6 @@ const app = {
                 }else {
                     _this.randomIndex();
                 }
-                // audio.play();
             }
         }
 
@@ -322,7 +321,7 @@ const app = {
     },
     repeatSong: function(){
         this.loadCurerntSong();
-        //  audio.play();
+         audio.play();
     },
     start: function() {
         //Định nghĩa các thuộc tính cho object
