@@ -23,41 +23,47 @@ const player = $('.player');
 const progress = $('#progress');
 const nextBtn = $('.btn-next');
 const prevtBtn = $('.btn-prev');
+const randomBtn = $('.btn-random');
+const repeatBtn = $('.btn-repeat');
+
+let randomIds = [];
 
 
 const app = {
-    currentIndex: 2,
+    currentIndex: 0,
     isPlaying: false,
+    isRandom: false,
+    isRepeating: false,
     songs: [{
-            id: 1,
+            id: 0,
             name: 'Hơn cả yêu',
             singer: 'Đức Phúc',
             path: 'assets/music/01.mp3',
             image: 'assets/img/01.jpg'
         },
         {
-            id: 2,
+            id: 1,
             name: 'Cứ vội vàng',
             singer: 'Rô Ti',
             path: 'assets/music/02.mp3',
             image: 'assets/img/02.jpg'
         },
         {
-            id: 3,
+            id: 2,
             name: 'Em đồng ý nha',
             singer: 'Nguyễn Qang Quý',
             path: 'assets/music/03.mp3',
             image: 'assets/img/03.jpg'
         },
         {
-            id: 4,
+            id: 3,
             name: 'Anh từng cố gắng',
             singer: 'Nhật Phong',
             path: 'assets/music/04.mp3',
             image: 'assets/img/04.jpg'
         },
         {
-            id: 5,
+            id: 4,
             name: 'Sắp 30',
             singer: 'Trịnh Đình Quang',
             path: 'assets/music/05.mp3',
@@ -152,14 +158,67 @@ const app = {
 
         //click nut next
         nextBtn.onclick = function() {
-            _this.nextSong();
-            audio.play();
+            if(_this.isRepeating===true){
+                _this.repeatSong();
+            }else{
+                if(_this.isRandom === false) {
+                    _this.nextSong();
+                }else {
+                    _this.randomIndex();
+                }
+                audio.play();
+            }
         }
 
         //click nut prev
         prevtBtn.onclick = function() {
-            _this.prevSong();
-            audio.play();
+
+            if(_this.isRepeating===true){
+                _this.repeatSong();
+            }else{
+                if(_this.isRandom === false) {
+                    _this.prevSong();
+                }else {
+                    _this.randomIndex();
+                }
+                audio.play();
+            }
+        }
+        
+        //khi ket thuc bai hat
+        audio.onended = function() {
+            if(_this.isRepeating===true){
+                _this.repeatSong();
+            }else{
+                if(_this.isRandom === false) {
+                    _this.nextSong();
+                }else {
+                    _this.randomIndex();
+                }
+                this.play();
+            }
+        }
+        //khi click vao nut random
+        randomBtn.onclick = function() {
+            if(_this.isRandom===false) {
+                randomBtn.classList.add('active');
+                _this.isRandom = true;
+            }else{
+                randomBtn.classList.remove('active');
+                _this.isRandom = false;
+            }
+        }
+
+
+        //khi click nut repeat
+        repeatBtn.onclick = function(){
+            if(_this.isRepeating===false) {
+                repeatBtn.classList.add('active');
+                _this.isRepeating = true;
+            }else {
+                repeatBtn.classList.remove('active');
+                _this.isRepeating = false;
+            }
         }
 
     },
@@ -167,7 +226,6 @@ const app = {
         heading.textContent = this.currentSong.name;
         cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`;
         audio.src = this.currentSong.path;
-        audio.play();
     },
     nextSong: function() {
         this.currentIndex++;
@@ -179,6 +237,24 @@ const app = {
         if (this.currentIndex < 0) this.currentIndex = this.songs.length - 1;
         this.loadCurerntSong();
     },
+    randomIndex: function(){
+        if(randomIds.length==0){
+            for(var i=0; i<this.songs.length; i++){
+                randomIds.push(i);
+            }
+        } 
+        //chon ngau nhien 1 index trong randmIds
+        let newIndex = Math.floor((Math.random() * randomIds.length ));
+        this.currentIndex = randomIds[newIndex];
+        randomIds = randomIds.filter(function(item){
+            return item!=randomIds[newIndex];
+        })
+        this.loadCurerntSong();
+    },
+    repeatSong: function(){
+        this.loadCurerntSong();
+        audio.play();
+    },
     start: function() {
         //Định nghĩa các thuộc tính cho object
         this.defineProperties()
@@ -188,12 +264,14 @@ const app = {
 
         //Tải thông tin bài hát đầu tiên vào UI khi chạy ứng dụng
         this.loadCurerntSong();
+        audio.play();
 
         //Render playlist
         this.render();
-
-
     }
 }
 
 app.start();
+
+
+
