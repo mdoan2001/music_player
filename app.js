@@ -25,7 +25,7 @@ const nextBtn = $('.btn-next');
 const prevtBtn = $('.btn-prev');
 const randomBtn = $('.btn-random');
 const repeatBtn = $('.btn-repeat');
-
+const playList = $('.playlist');
 let randomIds = [];
 
 
@@ -107,9 +107,9 @@ const app = {
     ],
 
     render: function() {
-        let htmls = this.songs.map(function(song) {
+        let htmls = this.songs.map(function(song, index) {
             return `
-            <div class="song">
+            <div class="song" data-index=${index}>
             <div class="thumb" style="background-image: url('${song.image}')">
             </div>
             <div class="body">
@@ -165,6 +165,7 @@ const app = {
         audio.onpause = function() {
             _this.isPlaying = false;
             player.classList.remove('playing');
+            cdThumbAnimate.pause();
         }
 
         //khi tien do bai hat thay doi
@@ -201,7 +202,7 @@ const app = {
                 }else {
                     _this.randomIndex();
                 }
-                audio.play();
+                // audio.play();
             }
         }
 
@@ -216,7 +217,6 @@ const app = {
                 }else {
                     _this.randomIndex();
                 }
-                audio.play();
             }
         }
         
@@ -230,7 +230,6 @@ const app = {
                 }else {
                     _this.randomIndex();
                 }
-                this.play();
             }
         }
         //khi click vao nut random
@@ -256,21 +255,54 @@ const app = {
             }
         }
 
+        //khi click chon bai hat          
+        playList.onclick = function(e){
+            const songNode = e.target.closest('.song:not(.active)');
+            if(songNode || e.target.closest('.option')){
+                //xu ly khi click vao song
+                if(songNode && !e.target.closest('.option')){
+                   _this.currentIndex =  songNode.getAttribute('data-index');
+                   _this.loadCurerntSong();
+                   audio.play();
+
+                    document.documentElement.scrollTop = 0;
+                   
+                }
+                //neu click vao option
+            }
+        }       
+
     },
     loadCurerntSong: function() {
         heading.textContent = this.currentSong.name;
         cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`;
         audio.src = this.currentSong.path;
+        const songs = $$('.song');
+        const songActive = $('.song.active');
+        if(songActive){
+            songActive.classList.remove('active');
+        }
+        songs[this.currentIndex].classList.add('active');
+        for(var i=0; i<this.currentIndex; i++){
+            songs[i].style.order = 1;
+        }
+        for(var i=this.currentIndex; i<songs.length; i++){
+            songs[i].style.order = 0;
+        }
+        
     },
     nextSong: function() {
         this.currentIndex++;
         if (this.currentIndex >= this.songs.length) this.currentIndex = 0;
         this.loadCurerntSong();
+        audio.play();
     },
     prevSong: function() {
         this.currentIndex--;
         if (this.currentIndex < 0) this.currentIndex = this.songs.length - 1;
         this.loadCurerntSong();
+        audio.play();
+
     },
     randomIndex: function(){
         if(randomIds.length==0){
@@ -285,10 +317,12 @@ const app = {
             return item!=randomIds[newIndex];
         })
         this.loadCurerntSong();
+        audio.play();
+
     },
     repeatSong: function(){
         this.loadCurerntSong();
-        audio.play();
+        //  audio.play();
     },
     start: function() {
         //Định nghĩa các thuộc tính cho object
@@ -297,10 +331,11 @@ const app = {
         //Lắng nghe / xử lý các sự kiện (DOM events)
         this.handleEvent();
 
-        //Tải thông tin bài hát đầu tiên vào UI khi chạy ứng dụng
-        this.loadCurerntSong();
         //Render playlist
         this.render();
+
+        //Tải thông tin bài hát đầu tiên vào UI khi chạy ứng dụng
+        this.loadCurerntSong();        
     }
 }
 

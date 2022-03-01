@@ -16,6 +16,7 @@ body {
 html {
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
+    scroll-behavior: smooth;
 }
 
 .player {
@@ -117,7 +118,7 @@ header h2 {
 .progress {
     width: 100%;
     -webkit-appearance: none;
-    height: 6px;
+    height: 10px;
     background: #d3d3d3;
     outline: none;
     opacity: 0.7;
@@ -140,6 +141,8 @@ header h2 {
 .playlist {
     margin-top: 408px;
     padding: 12px;
+    display:flex;
+    flex-direction: column;
 }
 
 .song {
@@ -150,6 +153,7 @@ header h2 {
     padding: 8px 16px;
     border-radius: 5px;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    transition: all 1s ease;
 }
 
 .song.active {
