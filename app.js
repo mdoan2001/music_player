@@ -264,8 +264,7 @@ const app = {
 
         //Tải thông tin bài hát đầu tiên vào UI khi chạy ứng dụng
         this.loadCurerntSong();
-        audio.play();
-
+        playBtn.click();
         //Render playlist
         this.render();
     }
