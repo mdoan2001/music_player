@@ -51,7 +51,7 @@ const app = {
         {
             id: 2,
             name: 'Em đồng ý nha',
-            singer: 'Nguyễn Qang Quý',
+            singer: 'Nguyễn Quang Quý',
             path: 'assets/music/03.mp3',
             image: 'assets/img/03.jpg'
         },
@@ -68,6 +68,41 @@ const app = {
             singer: 'Trịnh Đình Quang',
             path: 'assets/music/05.mp3',
             image: 'assets/img/05.jpg'
+        },
+        {
+            id: 5,
+            name: 'Đừng làm em đau',
+            singer: 'Thương Võ',
+            path: 'assets/music/06.mp3',
+            image: 'assets/img/06.jpg'
+        },
+        {
+            id: 6,
+            name: 'Người lạ thoáng qua',
+            singer: 'Thương Võ',
+            path: 'assets/music/07.mp3',
+            image: 'assets/img/07.jpg'
+        },
+        {
+            id: 7,
+            name: 'Chạy về nơi phía anh',
+            singer: 'Khắc Việt',
+            path: 'assets/music/08.mp3',
+            image: 'assets/img/08.jpg'
+        },
+        {
+            id: 8,
+            name: 'Bước qua nhau',
+            singer: 'Vũ',
+            path: 'assets/music/09.mp3',
+            image: 'assets/img/09.jpg'
+        },
+        {
+            id: 9,
+            name: 'Bông hoa đẹp nhất',
+            singer: 'Quân A.P',
+            path: 'assets/music/10.mp3',
+            image: 'assets/img/10.jpg'
         }
     ],
 
@@ -264,7 +299,6 @@ const app = {
 
         //Tải thông tin bài hát đầu tiên vào UI khi chạy ứng dụng
         this.loadCurerntSong();
-        playBtn.click();
         //Render playlist
         this.render();
     }
